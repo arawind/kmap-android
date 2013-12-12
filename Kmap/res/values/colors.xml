@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="HIGHLIGHTED">#FFEEAA00</color>
+    <color name="NORMAL">#00FFFFFF</color>
+    <color name="Red">#FF00</color>
+    <color name="Green">#F0F0</color>
+    <color name="Blue">#F00F</color>
+</resources>
