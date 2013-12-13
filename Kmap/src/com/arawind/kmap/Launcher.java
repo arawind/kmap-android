@@ -37,7 +37,7 @@ public class Launcher extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
-		numVar = 4;
+		numVar = 5;
 		setContentView(R.layout.activity_launcher);
 		
 		String sessionPref = "com.arawind.kmap.session";
@@ -49,14 +49,15 @@ public class Launcher extends Activity {
 		
 		SharedPreferences prefs = this.getSharedPreferences(sessionPref, Context.MODE_PRIVATE);
 		numCol = prefs.getInt(sessionPref+".numCol", 0);
+		int temp_numVar = prefs.getInt(sessionPref+".numVar", 0);
 		
 		String varNamesStr = prefs.getString(sessionPref+".varNamesStr", "");
-		
+				
 		String[]  rowHead = prefs.getString(sessionPref+".rowHead","").split(",");
 		String[]  colHead = prefs.getString(sessionPref+".colHead","").split(",");
 		String[] strArray = prefs.getString(sessionPref+".strArray","").split(",");
 		
-		if(numCol==0){
+		if(temp_numVar != numVar){
 			SharedPreferences.Editor prefEditor = prefs.edit();
 			
 			KMapTableBuilder kmap = new KMapTableBuilder(numVar);
@@ -70,6 +71,7 @@ public class Launcher extends Activity {
 			strArray = kmap.getTableString();
 			
 			prefEditor.putInt(sessionPref+".numCol", numCol);
+			prefEditor.putInt(sessionPref+".numVar", numVar);
 			
 			prefEditor.putString(sessionPref+".varNamesStr", varNamesStr);
 			prefEditor.putString(sessionPref+".rowHead", join(rowHead));
@@ -116,11 +118,11 @@ public class Launcher extends Activity {
 			list  = list.subList(0, 16);			
 		}
 		
-		ArrayAdapter<String>    adapter = new GVArrayAdapter(this, R.layout.txt, list, selectedList);
+		ArrayAdapter<String>    adapter = new GVArrayAdapter(this, R.layout.txt, list, selectedList, 0);
 		ArrayAdapter<String> rowAdapter = new ArrayAdapter<String>(this, R.layout.txt, rowList);
 		ArrayAdapter<String> colAdapter = new ArrayAdapter<String>(this, R.layout.txt, colList);
 		ArrayAdapter<String> varAdapter = new ArrayAdapter<String>(this, R.layout.txt, varList);
-		ArrayAdapter<String>   adapter5 = new GVArrayAdapter(this, R.layout.txt, list5, selectedList);
+		ArrayAdapter<String>   adapter5 = new GVArrayAdapter(this, R.layout.txt, list5, selectedList, 1);
 		ArrayAdapter<String>    colorAd = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, colorList);
 		
 		colorAd.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

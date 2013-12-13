@@ -13,15 +13,16 @@ import android.widget.TextView;
 
 public class GVArrayAdapter extends ArrayAdapter<String> {
 	
-	private int resid;
+	private int resid, id;
 	private Map<String, Integer> slist;
 	private List<String> objects;
 
-	public GVArrayAdapter(Context context, int resid, List<String> objects, Map<String, Integer> map) {
+	public GVArrayAdapter(Context context, int resid, List<String> objects, Map<String, Integer> map, int id) {
 		super(context, resid, objects);
 		this.resid = resid;
 		this.slist = map;
 		this.objects = objects;
+		this.id = id;
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent){
@@ -38,6 +39,8 @@ public class GVArrayAdapter extends ArrayAdapter<String> {
 			ArrayList<String> removeList = new ArrayList<String>();
 			for(Map.Entry<String, Integer> entry : slist.entrySet()){
 				int pos = Integer.parseInt(entry.getKey().split("-")[0]);
+				if(id == 1)
+					pos = pos-16;
 				if(pos == position && removeList.indexOf(entry.getKey()) == -1){
 					currentColor = entry.getValue();
 					((AutoResizeTextView)v).addColor(currentColor, position);
