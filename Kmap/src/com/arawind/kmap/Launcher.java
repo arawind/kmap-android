@@ -60,9 +60,7 @@ public class Launcher extends Activity {
 			SharedPreferences.Editor prefEditor = prefs.edit();
 			
 			KMapTableBuilder kmap = new KMapTableBuilder(numVar);
-			
-			//Log.i("launcher", kmap.str);
-			
+						
 			numCol = kmap.getNumCol();
 			
 			varNamesStr = kmap.getVarNames();
@@ -204,64 +202,19 @@ public class Launcher extends Activity {
 	
 	private void gridOnItemClick(View v, int position){
 		
-		if(v.getTag(R.string.CHECKED) != "true"){
-			
-			if(v.getTag(R.string.POSITION) == null)
-				v.setTag(R.string.POSITION, position);
-			ArrayList<Integer> colors = new ArrayList<Integer>();
-			colors.add(currentColor);
+		switch(((AutoResizeTextView)v).addColor(currentColor, position)){
+		case 1:
 			if(!selectedList.containsKey(String.valueOf(position)+"-"+String.valueOf(currentColor)))
 				selectedList.put(String.valueOf(position)+"-"+String.valueOf(currentColor), currentColor);
-			v.setTag(R.string.COLORS, colors);
-			v.setTag(R.string.CHECKED, "true");
-			((AutoResizeTextView)v).setBG(colors.size());
-			//
-		}
-		else{
-			if(v.getTag(R.string.COLORS) != null){
-				@SuppressWarnings("unchecked")
-				ArrayList<Integer> colors = (ArrayList<Integer>) v.getTag(R.string.COLORS);
-				if(colors.size() > 0){
-					if(colors.indexOf(currentColor)!=-1){
-						colors.remove(colors.indexOf(currentColor));
-						selectedList.remove(String.valueOf(position)+"-"+String.valueOf(currentColor));
-					}
-					else{
-						colors.add(currentColor);
-						selectedList.put(String.valueOf(position)+"-"+String.valueOf(currentColor), currentColor);
-					}
-					v.setTag(R.string.COLORS, colors);
-					if(colors.size() > 0)
-						((AutoResizeTextView)v).setBG(colors.size());
-					else{
-						v.setBackgroundDrawable(null);	
-						v.setTag(R.string.CHECKED, "false");
-					}
-				}
-			}
-			else
-				v.setTag(R.string.CHECKED, "false");
-		}
-	}
-	
-	private void setBG(View v, int size) {
-		ArrayList<Integer> colors = (ArrayList<Integer>) v.getTag(R.string.COLORS);
-		ShapeDrawable[] bg = new ShapeDrawable[size];
-		int w = v.getWidth()/colors.size();
-		int h = v.getHeight();
-		for(int i=0; i < colors.size(); i++){
-			bg[i] = new ShapeDrawable();
-			bg[i].setBounds(i*w, 0, (i+1)*w, h);
-			bg[i].getPaint().setColor(this.getResources().getColor(colors.get(i)));
-		}
-		bg[0].setPadding(0, v.getPaddingTop(), 0, v.getPaddingBottom());
-		Drawable[] layers = bg;
+			break;
+		case -1:
+			selectedList.remove(String.valueOf(position)+"-"+String.valueOf(currentColor));
+			break;
+		default:
+			break;
+		//selectedList.put(String.valueOf(position)+"-"+String.valueOf(currentColor), currentColor);
 		
-		LayerDrawable ld = new LayerDrawable(layers);
-		for(int i=0; i < colors.size(); i++){
-			ld.setLayerInset(i, i*w, -v.getPaddingTop(),0, -v.getPaddingBottom());
 		}
-		v.setBackgroundDrawable(ld);
 	}
 
 	private void extenderToggler(){

@@ -317,6 +317,8 @@ protected void onSizeChanged(int width, int height, int oldwidth,
 }
 
 
+//AuthorChange -- arawind
+
 protected void onLayout(boolean changed, int left, int top, int right, int bottom){
 	super.onLayout(changed, left, top, right, bottom);
 	
@@ -344,6 +346,49 @@ public void setBG(int size) {
 		ld.setLayerInset(i, i*w, -getPaddingTop(),0, -getPaddingBottom());
 	}
 	setBackgroundDrawable(ld);	
+}
+
+public int addColor(int currentColor, int position){
+	int retVal = 0;
+	if(getTag(R.string.CHECKED) != "true"){
+		
+		if(getTag(R.string.POSITION) == null)
+			setTag(R.string.POSITION, position);
+		ArrayList<Integer> colors = new ArrayList<Integer>();
+		colors.add(currentColor);
+		retVal = 1;
+		setTag(R.string.COLORS, colors);
+		setTag(R.string.CHECKED, "true");
+		setBG(colors.size());
+		
+	}
+	else{
+		if(getTag(R.string.COLORS) != null){
+			@SuppressWarnings("unchecked")
+			ArrayList<Integer> colors = (ArrayList<Integer>) getTag(R.string.COLORS);
+			if(colors.size() > 0){
+				if(colors.indexOf(currentColor)!=-1){
+					colors.remove(colors.indexOf(currentColor));
+					retVal = -1;
+				}
+				else{
+					colors.add(currentColor);
+					retVal = 1;
+				}
+				setTag(R.string.COLORS, colors);
+				if(colors.size() > 0)
+					setBG(colors.size());
+				else{
+					setBackgroundDrawable(null);	
+					setTag(R.string.CHECKED, "false");
+				}
+			}
+		}
+		else
+			setTag(R.string.CHECKED, "false");
+	}
+	
+	return retVal;
 }
 
 }
